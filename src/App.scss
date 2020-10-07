@@ -5,6 +5,7 @@ body {
 
 .set-contact {
 	margin-right: 20px !important;
+	margin-bottom: 20px !important;
 }
 
 .margin-right {
@@ -13,4 +14,10 @@ body {
 
 .margin-bottom {
 	margin-bottom: 10px !important;
+}
+
+@media (max-width: 625px) {
+	.set-contact {
+		margin-right: 0 !important;
+	}
 }
