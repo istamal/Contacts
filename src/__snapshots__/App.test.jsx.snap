@@ -1,0 +1,50 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`matches snapshot 1`] = `
+<div
+  className="sc-AxjAm fAPiVx"
+  data-testid="wrapper"
+>
+  <h1
+    className="sc-AxirZ ficMlO"
+  >
+    Hello, Istamal!
+  </h1>
+  <p
+    className="sc-AxiKw Wwxzi"
+  >
+    the cra template
+  </p>
+  <p
+    className="sc-AxhUy bgbkIn"
+  >
+    The template includes
+     
+    <span
+      className="sc-AxhCb bmEVDm"
+    >
+      Antd
+    </span>
+    ,
+    <span
+      className="sc-AxhCb bmEVDm"
+    >
+      Prop-Types
+    </span>
+    ,
+    <span
+      className="sc-AxhCb bmEVDm"
+    >
+      Styled-Components
+    </span>
+    .
+    <span
+      className="sc-AxhCb bmEVDm"
+    >
+      Node-Sass
+    </span>
+     
+    and more.
+  </p>
+</div>
+`;
