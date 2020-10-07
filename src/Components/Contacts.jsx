@@ -53,22 +53,20 @@ const Contacts = (props) => {
   React.useEffect(async () => {
     const fetchContacts = async () => {
       const response = await axios.get('http://localhost:3004/posts');
-      setCotcontacts(response.data);
-    	console.log(response.data);
+      const newContacts = response.data.reduce((acc, obj) => [...acc, { name: obj.name, number: obj.number, key: obj.id }], []);
+      setCotcontacts(newContacts);
     };
     fetchContacts();
   }, []);
 
   const handleDelete = async (row) => {
-    row.forEach((id) => axios.delete(`http://localhost:3004/posts/${id}`));
-    const newContacts = contacts.filter((el) => !row.includes(el.key));
-    setCotcontacts(newContacts);
+    await row.forEach((id) => axios.delete(`http://localhost:3004/posts/${id}`));
     setSelected(null);
   };
 
   const handleSeach = async (str) => {
-    const id = contacts.map((el) => (el.name === str ? el.key : null));
-    const newContacts = contacts.filter((el) => el.key === id[0]);
+    const id = contacts.map((el) => (el.name === str ? el.id : null));
+    const newContacts = contacts.filter((el) => el.id === id[0]);
     console.log(newContacts);
     setCotcontacts(newContacts);
   };
@@ -77,20 +75,19 @@ const Contacts = (props) => {
     {
       title: 'Name',
       dataIndex: 'name',
-      key: 'name',
+      id: 'name',
     },
     {
       title: 'Number',
       dataIndex: 'number',
-      key: 'number',
+      id: 'number',
     },
   ];
 
-  const onFinish = async ({ name, number, id }) => {
-    const response = await axios.post('http://localhost:3004/posts', { name, number, key: id });
+  const onFinish = async (values) => {
+    const response = await axios.post('http://localhost:3004/posts', values);
     const { data } = response;
-    console.log(data);
-    const contact = { key: data.key, name: data.name, number: data.number };
+    const contact = { key: data.id, name: data.name, number: data.number };
     setCotcontacts([...contacts, contact]);
   };
 
