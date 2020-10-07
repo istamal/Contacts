@@ -9,15 +9,17 @@ import {
   Button,
   Card,
   Table,
+  notification,
 } from 'antd';
 
 const Wrapper = styled.div`
   width: 100%;
-	height: 100vh;
-	padding-top: 30px;
-	display: flex;
-	justify-content: center;
-	align-items: flex-start;
+  height: 100vh;
+  padding-top: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: wrap;
 `;
 
 const layout = {
@@ -35,11 +37,19 @@ const tailLayout = {
   },
 };
 
-const Contacts = (props) => {
+const Contacts = () => {
   const [contacts, setCotcontacts] = React.useState([]);
   const [selected, setSelected] = React.useState(null);
 
+  const openNotificationWithIcon = (type, message, description) => {
+    notification[type]({
+      message,
+      description,
+    });
+  };
+
   const rowSelection = {
+    // eslint-disable-next-line no-unused-vars
     onChange: (selectedRowKeys, selectedRows) => {
       setSelected(selectedRowKeys);
     },
@@ -49,24 +59,30 @@ const Contacts = (props) => {
     }),
   };
 
-  React.useEffect(async () => {
+  React.useEffect(() => {
     const fetchContacts = async () => {
       const response = await axios.get('http://localhost:3004/posts');
-      const newContacts = response.data.reduce((acc, obj) => [...acc, { name: obj.name, number: obj.number, key: obj.id }], []);
+      const newContacts = response.data
+        .reduce((acc, obj) => [...acc, { name: obj.name, number: obj.number, key: obj.id }], []);
       setCotcontacts(newContacts);
     };
     fetchContacts();
   }, []);
 
   const handleDelete = async (row) => {
-    await row.forEach((id) => axios.delete(`http://localhost:3004/posts/${id}`));
-    setSelected(null);
+    if (row) {
+      await row.forEach((id) => axios.delete(`http://localhost:3004/posts/${id}`));
+      openNotificationWithIcon('success', 'Окей!', 'Контакт удолен');
+      setSelected(null);
+    } else {
+      openNotificationWithIcon('error', 'Контакт не выбран', 'Убедитесь что выбрали контакт');
+    }
   };
 
   const handleSeach = async (str) => {
     const response = await axios.get(`http://localhost:3004/posts?name=${str}`);
     if (!response.data.length) {
-      alert('Нет такого контакта');
+      openNotificationWithIcon('info', 'Нет токого контакта', 'Убедитесь в правильности введенного имени');
     } else {
       setCotcontacts([...response.data]);
     }
@@ -93,6 +109,7 @@ const Contacts = (props) => {
   };
 
   const onFinishFailed = (errorInfo) => {
+    // eslint-disable-next-line no-console
     console.log('Failed:', errorInfo);
   };
 
@@ -103,7 +120,7 @@ const Contacts = (props) => {
           {...layout}
           name="basic"
           initialValues={{
-					  remember: true,
+            remember: true,
           }}
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
@@ -112,10 +129,10 @@ const Contacts = (props) => {
             label="Номер"
             name="number"
             rules={[
-						  {
-						    required: true,
-						    message: 'Пожалуйста введите номер',
-						  },
+              {
+                required: true,
+                message: 'Пожалуйста введите номер',
+              },
             ]}
           >
             <Input />
@@ -125,10 +142,10 @@ const Contacts = (props) => {
             label="Имя"
             name="name"
             rules={[
-						  {
-						    required: true,
-						    message: 'Пожалуйста введите имя',
-						  },
+              {
+                required: true,
+                message: 'Пожалуйста введите имя',
+              },
             ]}
           >
             <Input />
@@ -147,7 +164,7 @@ const Contacts = (props) => {
         <Button className="margin-bottom" type="primary">Редактрировать</Button>
         <Table
           rowSelection={{
-					  ...rowSelection,
+            ...rowSelection,
           }}
           columns={columns}
           dataSource={contacts}
