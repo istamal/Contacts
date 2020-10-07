@@ -42,7 +42,6 @@ const Contacts = (props) => {
   const rowSelection = {
     onChange: (selectedRowKeys, selectedRows) => {
       setSelected(selectedRowKeys);
-      console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
     },
     getCheckboxProps: (record) => ({
       disabled: record.name === 'Disabled User', // Column configuration not to be checked
@@ -65,10 +64,12 @@ const Contacts = (props) => {
   };
 
   const handleSeach = async (str) => {
-    const id = contacts.map((el) => (el.name === str ? el.id : null));
-    const newContacts = contacts.filter((el) => el.id === id[0]);
-    console.log(newContacts);
-    setCotcontacts(newContacts);
+    const response = await axios.get(`http://localhost:3004/posts?name=${str}`);
+    if (!response.data.length) {
+      alert('Нет такого контакта');
+    } else {
+      setCotcontacts([...response.data]);
+    }
   };
 
   const columns = [
