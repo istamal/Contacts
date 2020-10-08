@@ -23,7 +23,7 @@ const Wrapper = styled.div`
 function App() {
   return (
     <Wrapper>
-      <Router>
+      <Router bacename="contacts-demo">
         <PrivateRoute exact path="/" component={Contacts} />
         <Route path="/login" component={Login} />
       </Router>
