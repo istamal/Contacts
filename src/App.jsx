@@ -24,7 +24,7 @@ function App() {
   return (
     <Wrapper>
       <Router bacename="contacts-demo">
-        <PrivateRoute exact path="/" component={Contacts} />
+        <PrivateRoute path="/" component={Contacts} />
         <Route path="/login" component={Login} />
       </Router>
     </Wrapper>
